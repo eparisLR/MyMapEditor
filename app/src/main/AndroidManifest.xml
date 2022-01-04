@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMapEditor">
         <activity
-            android:name=".MainActivity"
+            android:name=".ModifyMap"
+            android:exported="true" />
+        <activity
+            android:name=".ListMap"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
