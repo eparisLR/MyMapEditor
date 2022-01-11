@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyMap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="@string/create_a_map"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:textSize="20sp"
+                android:textAlignment="textStart"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/return_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/retour"/>
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:inputType="textPersonName"
+            android:hint="@string/enter_a_map_name"/>
+
+        <TextView
+            android:id="@+id/create_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_a_point"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_a_name"/>
+
+        <EditText
+            android:id="@+id/latitude"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_the_latitude"/>
+
+        <EditText
+            android:id="@+id/longitude"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_the_longitude"/>
+
+        <Spinner
+            android:id="@+id/type"
+            android:inputType=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:autofillHints="name"/>
+
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
