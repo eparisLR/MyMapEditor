@@ -2,4 +2,6 @@
     <string name="app_name">MyMapEditor</string>
     <string name="create_a_map">Create a map</string>
     <string name="welcome_on_the_map_editor">Welcome on the map editor</string>
+    <string name="get_maps">Get maps</string>
+    <string name="view">View map</string>
 </resources>
