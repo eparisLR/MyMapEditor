@@ -16,7 +16,7 @@
             android:name=".ModifyMap"
             android:exported="true" />
         <activity
-            android:name=".ListMap"
+            android:name=".ListMapActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

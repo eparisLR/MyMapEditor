@@ -3,6 +3,8 @@ package com.example.mymapeditor
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.widget.ListView
 import android.widget.Toast
 import com.example.mymapeditor.databinding.ModifyMapActivityBinding
 import com.mapbox.mapboxsdk.maps.Style
@@ -14,14 +16,18 @@ import service.MapApiClient
 import java.lang.Exception
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.geometry.LatLng
+import model.Type
 
 class ModifyMap : AppCompatActivity() {
     private lateinit var binding: ModifyMapActivityBinding
     private var oneMap: MutableList<Point>? = arrayListOf()
     private lateinit var mapview: MapView
+    private var newMap: MutableList<Point>? = arrayListOf()
 
     companion object {
-        val EXTRA_KEY = "MAP_NAME"
+        const val EXTRA_MAP_NAME = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,26 +48,55 @@ class ModifyMap : AppCompatActivity() {
             }
         }
 
-        // Displaying the spinner
-
         binding.returnButton.setOnClickListener {
-            val intent = Intent(this, ListMap::class.java)
+            val intent = Intent(this, ListMapActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        binding.createPointButton.setOnClickListener {
+            val pointName = binding.pointName.text.toString()
+            val pointLatitude = binding.pointLatitude.text.toString()
+            val pointLongitude = binding.pointLongitude.text.toString()
+            val pointType = binding.pointType.text.toString()
+            createPoint(pointName, pointLatitude, pointLongitude, pointType)
+        }
+
+        binding.createMapButton.setOnClickListener {
+            saveMap()
+        }
+
+        if (intent.getStringExtra(EXTRA_MAP_NAME) != null && intent.getStringExtra(EXTRA_MAP_NAME) != "") {
+            try {
+                getOneMap()
+                binding.mapNameInput.setText(intent.getStringExtra(EXTRA_MAP_NAME))
+            } catch (e: Exception) {
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun getOneMap(){
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val response = MapApiClient.mapApiService.getMapById(1)
-                if (response.isSuccessful && response.body() != null) {
+                val response = intent.getStringExtra(EXTRA_MAP_NAME)
+                    ?.let { MapApiClient.mapApiService.getMapById(it) }
+                if (response?.isSuccessful == true && response.body() != null) {
                     val content = response.body()
                     oneMap = content
+                    println(oneMap)
+                    for (point in oneMap!!) {
+                        createPoint(
+                            point.name.toString(),
+                            point.latitude.toString(),
+                            point.longitude.toString(),
+                            point.type.toString()
+                        )
+                    }
                 } else {
                     Toast.makeText(
                         this@ModifyMap,
-                        "Error occurred : ${response.message()}",
+                        "Error occurred : ${response?.message()}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -72,6 +107,53 @@ class ModifyMap : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+    }
+
+    private fun saveMap() {
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val mapName = binding.mapNameInput.text.toString()
+                val points: MutableList<Point> = newMap ?: arrayListOf()
+                val response = MapApiClient.mapApiService.createMap(mapName, points)
+                if (response.isSuccessful && response.body() != null) {
+                    val content = response.body()
+                    oneMap = content
+                    for (point in oneMap!!) {
+                        createPoint(
+                            point.name.toString(),
+                            point.latitude.toString(),
+                            point.longitude.toString(),
+                            point.type.toString()
+                        )
+                    }
+                } else {
+                    Toast.makeText(
+                        this@ModifyMap,
+                        "Error occurred : ${response.message()}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    private fun createPoint(pointName: String, pointLatitude: String, pointLongitude: String, pointType: String) {
+
+        val point = Point(pointName, Type.TARGET , pointLatitude.toDouble(), pointLongitude.toDouble())
+
+        mapview.getMapAsync{ map ->
+            // On choisit un style ( et on ne fait rien avec)
+            map.setStyle(Style.OUTDOORS) {
+                    style ->
+            }
+            map.addMarker(MarkerOptions().title("Mon titre").position(LatLng(pointLatitude.toDouble(), pointLongitude.toDouble())))
+        }
+
+        if (!(intent.getStringExtra(EXTRA_MAP_NAME) != null && intent.getStringExtra(EXTRA_MAP_NAME) != "")) {
+            newMap?.add(point)
         }
     }
 }

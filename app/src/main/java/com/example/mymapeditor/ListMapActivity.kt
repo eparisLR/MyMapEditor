@@ -10,11 +10,10 @@ import com.example.mymapeditor.databinding.ListMapActivityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import model.Point
 import service.MapApiClient
 import java.lang.Exception
 
-class ListMap : AppCompatActivity() {
+class ListMapActivity : AppCompatActivity() {
     private lateinit var binding: ListMapActivityBinding
     private var maps: List<String>? = emptyList()
 
@@ -29,7 +28,7 @@ class ListMap : AppCompatActivity() {
         binding.createMap.setOnClickListener {
             val intent = Intent( this, ModifyMap::class.java)
             // Cette ligne sert à injecter des paramètres UTILE POUR LA MODIF D'UNE CARTE
-            //intent.putExtra(SecondaryActivity.EXTRA_KEY , binding.saisieNom.text.toString())
+            intent.putExtra(ModifyMap.EXTRA_MAP_NAME , "")
             startActivity(intent)
             finish()
         }
@@ -42,19 +41,18 @@ class ListMap : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val content = response.body()
                     maps = content
-                    println(maps)
                     val listView = findViewById<ListView>(R.id.listview)
-                    listView.adapter = maps?.let { MapAdapter(this@ListMap, it) }
+                    listView.adapter = maps?.let { MapAdapter(this@ListMapActivity, it) }
                 } else {
                     Toast.makeText(
-                        this@ListMap,
+                        this@ListMapActivity,
                         "Error occurred : ${response.message()}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
-                    this@ListMap,
+                    this@ListMapActivity,
                     "Error occurred : ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()

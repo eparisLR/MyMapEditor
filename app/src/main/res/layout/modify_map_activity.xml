@@ -32,11 +32,17 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/map_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:inputType="textPersonName"
             android:hint="@string/enter_a_map_name"/>
+        <Button
+            android:id="@+id/create_map_button"
+            android:text="@string/create_a_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/create_point"
@@ -47,33 +53,38 @@
             android:textAlignment="center"/>
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/point_name"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_a_name"/>
 
         <EditText
-            android:id="@+id/latitude"
+            android:id="@+id/point_latitude"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_the_latitude"/>
 
         <EditText
-            android:id="@+id/longitude"
+            android:id="@+id/point_longitude"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_the_longitude"/>
 
-        <Spinner
-            android:id="@+id/type"
-            android:inputType=""
+        <EditText
+            android:id="@+id/point_type"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:autofillHints="name"/>
+            android:hint="@string/enter_a_type"/>
+
+        <Button
+            android:id="@+id/create_point_button"
+            android:text="@string/create_a_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <com.mapbox.mapboxsdk.maps.MapView
             android:id="@+id/mapview"

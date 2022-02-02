@@ -9,9 +9,9 @@ import android.widget.ArrayAdapter;
 
 import model.Point;
 
-class MapAdapter(context: Context, maps:List<String>) : ArrayAdapter<String>(context, 0, maps) {
+class MapAdapter(context: ListMapActivity, maps:List<String>) : ArrayAdapter<String>(context, 0, maps) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val mapView = MapView(context)
+        val mapView = MapView(context as ListMapActivity)
         mapView.populate(getItem(position));
         return mapView
     }
