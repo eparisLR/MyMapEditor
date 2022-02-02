@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">MyMapEditor</string>
     <string name="create_a_map">Create a map</string>
+    <string name="edit_a_map">Edit a map</string>
     <string name="welcome_on_the_map_editor">Welcome on the map editor</string>
     <string name="get_maps">Get maps</string>
     <string name="view">View map</string>
-    <string name="retour">Retour</string>
+    <string name="back">Back</string>
     <string name="map_name">Map name</string>
     <string name="enter_a_map_name">Enter a map name</string>
     <string name="access_token">pk.eyJ1IjoiZXBhcmlzIiwiYSI6ImNreTl3dGhmMzBhczgzMG8zcmFxNzZpcHIifQ.fRT3LyvCjgag7LIiv_LN0A</string>
     <string name="create_a_point">Create a point</string>
+    <string name="edit_a_point">Edit a point</string>
     <string name="enter_a_name">Enter a name</string>
     <string name="enter_the_latitude">Enter the latitude</string>
     <string name="enter_the_longitude">Enter the longitude</string>

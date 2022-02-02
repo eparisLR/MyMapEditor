@@ -3,9 +3,8 @@ package com.example.mymapeditor
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.NonNull
 import com.example.mymapeditor.databinding.ModifyMapActivityBinding
 import com.mapbox.mapboxsdk.maps.Style
 import kotlinx.coroutines.Dispatchers
@@ -16,14 +15,17 @@ import service.MapApiClient
 import java.lang.Exception
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import model.Type
 
 class ModifyMap : AppCompatActivity() {
     private lateinit var binding: ModifyMapActivityBinding
     private var oneMap: MutableList<Point>? = arrayListOf()
     private lateinit var mapview: MapView
+    private var onePoint: Point? = null
     private var newMap: MutableList<Point>? = arrayListOf()
 
     companion object {
@@ -46,6 +48,14 @@ class ModifyMap : AppCompatActivity() {
             // On choisi un style (et on ne fait rien avec)
             map.setStyle(Style.OUTDOORS) { style ->
             }
+            map.setOnMarkerClickListener(object: MapboxMap.OnMarkerClickListener {
+                override
+                fun onMarkerClick(@NonNull marker:Marker):Boolean {
+                    Toast.makeText(getApplicationContext(), marker.getTitle(), Toast.LENGTH_LONG).show()
+                    onePoint = oneMap?.find { it.latitude == marker.position.latitude }
+                    return true
+                }
+            })
         }
 
         binding.returnButton.setOnClickListener {
@@ -73,6 +83,11 @@ class ModifyMap : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        if (oneMap != null) {
+            binding.editOrCreate.setText(R.string.edit_a_map)
+            binding.createMapButton.setText(R.string.edit_a_map)
         }
     }
 
@@ -114,7 +129,7 @@ class ModifyMap : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 val mapName = binding.mapNameInput.text.toString()
-                val points: MutableList<Point> = newMap ?: arrayListOf()
+                val points: MutableList<Point> = (newMap ?: arrayListOf()) ?: (oneMap ?: arrayListOf())
                 val response = MapApiClient.mapApiService.createMap(mapName, points)
                 if (response.isSuccessful && response.body() != null) {
                     val content = response.body()
@@ -127,6 +142,11 @@ class ModifyMap : AppCompatActivity() {
                             point.type.toString()
                         )
                     }
+                    Toast.makeText(
+                        this@ModifyMap,
+                        "Create success",
+                        Toast.LENGTH_LONG
+                    ).show()
                 } else {
                     Toast.makeText(
                         this@ModifyMap,
@@ -152,8 +172,10 @@ class ModifyMap : AppCompatActivity() {
             map.addMarker(MarkerOptions().title("Mon titre").position(LatLng(pointLatitude.toDouble(), pointLongitude.toDouble())))
         }
 
-        if (!(intent.getStringExtra(EXTRA_MAP_NAME) != null && intent.getStringExtra(EXTRA_MAP_NAME) != "")) {
+        if (newMap != null) {
             newMap?.add(point)
+        } else {
+            oneMap?.add(point)
         }
     }
 }

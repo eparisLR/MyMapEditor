@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/edit_or_create"
                 android:text="@string/create_a_map"
                 android:layout_width="0dp"
                 android:layout_weight="3"
@@ -28,7 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/retour"/>
+                android:text="@string/back"/>
         </LinearLayout>
 
         <EditText
