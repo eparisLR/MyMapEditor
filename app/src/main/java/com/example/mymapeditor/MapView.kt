@@ -1,6 +1,5 @@
 package com.example.mymapeditor;
 
-import android.content.Context;
 import android.content.Intent
 import android.widget.Button
 import android.widget.FrameLayout;
@@ -9,7 +8,6 @@ import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import model.Point
 import service.MapApiClient
 import java.lang.Exception
 
@@ -21,9 +19,9 @@ class MapView(context: ListMapActivity) : FrameLayout(context) {
     init {
         inflate(context, R.layout.view_map, this)
         findViewById<Button>(R.id.buttonSelectMap).setOnClickListener {
-            val intent = Intent( context, ModifyMap::class.java)
+            val intent = Intent( context, ModifyMapActivity::class.java)
             // Cette ligne sert à injecter des paramètres UTILE POUR LA MODIF D'UNE CARTE
-            intent.putExtra(ModifyMap.EXTRA_MAP_NAME , findViewById<TextView>(R.id.mapName).text);
+            intent.putExtra(ModifyMapActivity.EXTRA_MAP_NAME , findViewById<TextView>(R.id.mapName).text);
             context.startActivity(intent)
             context.finish()
         }

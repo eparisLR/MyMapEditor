@@ -5,9 +5,12 @@
       <map>
         <entry key="app/src/main/res/layout/activity_list_map.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_modify_map.xml" value="0.19635416666666666" />
+        <entry key="app/src/main/res/layout/activity_points_edit_activity.xml" value="0.1096757852077001" />
+        <entry key="app/src/main/res/layout/dialog_add_point.xml" value="0.17325227963525835" />
         <entry key="app/src/main/res/layout/list_map_activity.xml" value="0.335" />
         <entry key="app/src/main/res/layout/modify_map_activity.xml" value="0.25" />
         <entry key="app/src/main/res/layout/view_map.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/view_point.xml" value="0.1" />
       </map>
     </option>
   </component>

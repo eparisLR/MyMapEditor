@@ -3,9 +3,10 @@
     package="com.example.mymapeditor">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MapApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMapEditor">
         <activity
-            android:name=".ModifyMap"
+            android:name=".PointsEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModifyMapActivity"
             android:exported="true" />
         <activity
             android:name=".ListMapActivity"

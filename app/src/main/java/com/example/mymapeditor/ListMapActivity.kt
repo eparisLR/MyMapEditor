@@ -26,9 +26,9 @@ class ListMapActivity : AppCompatActivity() {
         getMaps()
 
         binding.createMap.setOnClickListener {
-            val intent = Intent( this, ModifyMap::class.java)
+            val intent = Intent( this, ModifyMapActivity::class.java)
             // Cette ligne sert à injecter des paramètres UTILE POUR LA MODIF D'UNE CARTE
-            intent.putExtra(ModifyMap.EXTRA_MAP_NAME , "")
+            intent.putExtra(ModifyMapActivity.EXTRA_MAP_NAME , "")
             startActivity(intent)
             finish()
         }

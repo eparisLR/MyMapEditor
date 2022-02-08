@@ -16,4 +16,9 @@
     <string name="enter_the_longitude">Enter the longitude</string>
     <string name="enter_a_type">Enter a type</string>
     <string name="delete_a_map">Delete a map</string>
+    <string name="add_a_point">Add a point</string>
+    <string name="points">points</string>
+    <string name="edit_the_point">Edit the point</string>
+    <string name="delete_the_point">Delete the point</string>
+    <string name="points_from_map">Points from map :</string>
 </resources>

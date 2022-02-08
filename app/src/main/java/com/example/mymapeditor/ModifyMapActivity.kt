@@ -1,8 +1,11 @@
 package com.example.mymapeditor
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.NonNull
 import com.example.mymapeditor.databinding.ModifyMapActivityBinding
@@ -21,7 +24,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import model.Type
 
-class ModifyMap : AppCompatActivity() {
+class ModifyMapActivity : AppCompatActivity() {
     private lateinit var binding: ModifyMapActivityBinding
     private var oneMap: MutableList<Point>? = arrayListOf()
     private lateinit var mapview: MapView
@@ -48,28 +51,17 @@ class ModifyMap : AppCompatActivity() {
             // On choisi un style (et on ne fait rien avec)
             map.setStyle(Style.OUTDOORS) { style ->
             }
-            map.setOnMarkerClickListener(object: MapboxMap.OnMarkerClickListener {
-                override
-                fun onMarkerClick(@NonNull marker:Marker):Boolean {
-                    Toast.makeText(getApplicationContext(), marker.getTitle(), Toast.LENGTH_LONG).show()
-                    onePoint = oneMap?.find { it.latitude == marker.position.latitude }
-                    return true
-                }
-            })
+            map.addOnMapLongClickListener {
+                showCoords(it)
+            }
         }
+
+        checkChangeTitle()
 
         binding.returnButton.setOnClickListener {
             val intent = Intent(this, ListMapActivity::class.java)
             startActivity(intent)
             finish()
-        }
-
-        binding.createPointButton.setOnClickListener {
-            val pointName = binding.pointName.text.toString()
-            val pointLatitude = binding.pointLatitude.text.toString()
-            val pointLongitude = binding.pointLongitude.text.toString()
-            val pointType = binding.pointType.text.toString()
-            createPoint(pointName, pointLatitude, pointLongitude, pointType)
         }
 
         binding.createMapButton.setOnClickListener {
@@ -85,9 +77,50 @@ class ModifyMap : AppCompatActivity() {
             }
         }
 
-        if (oneMap != null) {
+        binding.pointsList.setOnClickListener {
+            val intent = Intent(this, PointsEditActivity::class.java)
+            (application as MapApplication).setCurrentMapName(binding.mapNameInput.text.toString())
+            if (oneMap!!.size > 0) {
+                (application as MapApplication).setCurrentPoints(oneMap!!)
+            }
+            if(newMap!!.size > 0){
+                (application as MapApplication).setCurrentPoints(newMap!!)
+            }
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun showCoords(coords: LatLng): Boolean {
+        // AlertDialog builder
+        val dialogBuilder: AlertDialog? = this@ModifyMapActivity.let {
+            val builder = AlertDialog.Builder(it)
+            val input: EditText = EditText(this@ModifyMapActivity)
+
+            builder.setView(R.layout.dialog_add_point)
+                // Add actions buttond
+                .setPositiveButton(R.string.add_a_point, DialogInterface.OnClickListener {
+                        dialog, id -> createPoint(input.text.toString(), coords.latitude.toString(), coords.longitude.toString(), "TARGET" )
+                })
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
+                        dialog, id ->
+                })
+            builder.setView(R.layout.dialog_add_point)
+            builder.setTitle(R.string.add_a_point)
+            builder.create()
+        }
+
+        dialogBuilder?.show()
+        return true
+    }
+
+    private fun checkChangeTitle() {
+        if (oneMap!!.size > 0) {
             binding.editOrCreate.setText(R.string.edit_a_map)
             binding.createMapButton.setText(R.string.edit_a_map)
+        } else {
+            binding.editOrCreate.setText(R.string.create_a_map)
+            binding.createMapButton.setText(R.string.create_a_map)
         }
     }
 
@@ -99,7 +132,6 @@ class ModifyMap : AppCompatActivity() {
                 if (response?.isSuccessful == true && response.body() != null) {
                     val content = response.body()
                     oneMap = content
-                    println(oneMap)
                     for (point in oneMap!!) {
                         createPoint(
                             point.name.toString(),
@@ -108,16 +140,18 @@ class ModifyMap : AppCompatActivity() {
                             point.type.toString()
                         )
                     }
+                    checkChangeTitle()
+                    (application as MapApplication).setCurrentPoints(oneMap!!)
                 } else {
                     Toast.makeText(
-                        this@ModifyMap,
+                        this@ModifyMapActivity,
                         "Error occurred : ${response?.message()}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
-                    this@ModifyMap,
+                    this@ModifyMapActivity,
                     "Error occurred : ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
@@ -142,14 +176,16 @@ class ModifyMap : AppCompatActivity() {
                             point.type.toString()
                         )
                     }
+                    checkChangeTitle()
+
                     Toast.makeText(
-                        this@ModifyMap,
+                        this@ModifyMapActivity,
                         "Create success",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
                     Toast.makeText(
-                        this@ModifyMap,
+                        this@ModifyMapActivity,
                         "Error occurred : ${response.message()}",
                         Toast.LENGTH_LONG
                     ).show()
